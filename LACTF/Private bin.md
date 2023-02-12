@@ -23,10 +23,12 @@ we get two files sus-script.html and private-bin.pcapng.zip
 First we'll have a look at the pcap file as we need to figure out what website they are talking about, sadly everything is encrypted (daaamm security...) oh well, but we can still search for a domain name in our pcap file...
 
 we then search for the string "lac.tf" cause we get told that it's on that domain and we can find this in a tcp packet telling us which server it's hosted at
-![[1.png]]
+
+![1.png](/LACTF/1.png)
 
 This gives us access to a webserver which shows the files laying on it
-![[2.png]]
+
+![2.png](/LACTF/2.png)
 
 hmmm sslkey?
 Guess we can use that to decrypt our traffic, we'll download that down from the website and add it to our wireshark, so it uses that ssl key when reading the pcap file
@@ -34,36 +36,47 @@ https://www.comparitech.com/net-admin/decrypt-ssl-with-wireshark/
 
 from here we can see we get even more http packets than before, this is because it has decrypted the traffic between the server and the user.
 
-![[4.png]]
+![[4.png]](/LACTF/4.png)
 
 with this we can see there's some webpages that has been accessed, let's download those from our wireshark.
-![[5.png]]
+![[5.png]](/LACTF/5.png)
 
 here we can then open the bin webpage that we have downloaded...
 hmmm, asking for a decryption key??
-![[6.png]]
+
+![[6.png]](/LACTF/6.png)
 
 we don't have a decryption key...
 Let's check some more out...
 
 what about that sus script we got at first?
-![[7.png]]
+
+![[7.png]](/LACTF/7.png)
+
 After reading the script we can see something with a POST request, wait didn't it say something about a POST request in our pcap file?
 
 surely enough in our pcap file there is a POST request and we have downloaded the file, let's go check it out...
-![[8.png]]
+
+![[8.png]](/LACTF/8.png)
+
 it doesn't look like we can get some data out of it?
 
 wait, the sus script adds it all to a zip file, let's rename the file into a zip file and see if we can extract the data.
-![[9.png]]
+
+![[9.png]](/LACTF/9.png)
+
 surely enough, we got a key and some secret...
 let's extract it via the password which is used in the script.
 
-![[10.png]]
+![10.png](/LACTF/10.png)
+
 After extracting the key, we can now decrypt the bin!
-![[11.png]]
+
+![11.png](/LACTF/11.png)
+
 and we got it!
 flag.png let's download it!
-![[flag.png]]
+
+![flag.png](/LACTF/flag.png)
 
 lactf{e2e_encryption_is_only_as_safe_as_the_client_1dc5f2}
